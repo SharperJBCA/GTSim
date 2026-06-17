@@ -21,6 +21,11 @@ python scripts/run_pipeline.py \
 Writes `sky_map.fits`, `hits.fits`, `noise_map.fits` (+ PNGs) to `--outdir`.
 Run `... python -m gtsim run --help` (or read the script) for all options.
 
+You will need to download the 408MHz map. This can be obtained from: 
+https://lambda.gsfc.nasa.gov/product/foreground/fg_2014_haslam_408_get.html 
+
+Place the downloaded file into an ancillary_data directory. 
+
 ## Layout
 
 ```
@@ -28,7 +33,7 @@ src/gtsim/      library: config, site, scan, sky, noise, mapmaker, pipeline, cli
 configs/        survey TOML configs (mark1.toml = reference; TEMPLATE.toml to copy)
 scripts/        run_pipeline.py (full pipeline) + per-stage *_test.py validators
 tests/          pytest unit tests  (run: micromamba run -n lbs python -m pytest -q)
-ancillary_data/ Haslam map + digitised Fig. 2 TOD
+ancillary_data/ Haslam map
 docs/           PLAN.md (design + roadmap), CONFIGURING_SURVEYS.md (handoff guide)
 ```
 
@@ -44,3 +49,10 @@ The pipeline is config-driven. To add Effelsberg / Parkes / the later JBO epoch,
 copy `configs/TEMPLATE.toml` and edit it — see **`docs/CONFIGURING_SURVEYS.md`**
 for the field-by-field reference, run/validate instructions, and the known
 limitations that need code rather than config.
+
+## TODO
+
+There are a number of things that this pipeline needs to do that are not implemented.
+
+1) Output pixelisation/projection of the data is currently Healpix J2000. To match the original data we should be writing the map out in B1950 on a cartesian grid (I'm not sure exactly what projection they are using). 
+2) More systematic modules are needed. Currently only additive 1/f noise is available but we will also need systematics for: ground pickup, gain drifts, the atmosphere, and also any data processing that is applied to the data before mapping.
