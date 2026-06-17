@@ -1,0 +1,46 @@
+# Jodrell Bank Mark 1 (Lovell) 408 MHz survey — Haslam 1970
+# Values marked TODO are placeholders to be confirmed from references.
+
+name = "jbo_mark1_1965"
+
+[site]
+name = "Jodrell Bank"
+lat_deg = 53.2367
+lon_deg = -2.3085
+height_m = 78.0
+
+[instrument]
+freq_mhz = 408.0
+beam_fwhm_deg = 0.85       # TODO confirm
+net_k_sqrt_s = 0.2         # 0.2 K in 1 s integration -> white noise
+system_temp_k = 180.0      # Dicke receiver system temperature
+f_knee_hz = 0.5            # 1/f knee (assumed instrumental; trace is signal-dominated)
+alpha = -1.0               # 1/f PSD slope: P ~ f^alpha (alpha=-1 -> classic 1/f)
+
+[scan]
+mode = "meridian_elevation"
+rate_deg_per_sid_min = 3.0       # elevation/declination slew rate
+night_start_offset_sid_s = 80.0  # sweep-phase advance per night (-> 0.333 deg RA grid)
+dec_min_deg = -22.0              # southern declination limit
+dec_max_deg = 62.0               # northern declination limit
+azimuth = "auto"                 # "auto": due south below latitude, due north above
+sample_dt_s = 1.0                # integration time per sample (s); ties to net_k_sqrt_s
+cal_pause_s = 100.0              # calibration-diode dwell at the dec_max turn (Haslam Fig. 2)
+cal_at = "max"                   # dwell at the upper (dec_max) turnaround
+
+[window]
+start = "1965-11-22"
+end = "1966-01-27"
+night_only = true
+night_sun_alt_deg = 0.0    # astronomical twilight
+# Zero-level (zenith) calibration days with no survey scans:
+exclude_dates = ["1965-12-25", "1965-12-26"]
+
+[coverage]
+ra_hours = [0.0, 12.0]
+# Quality mask for the reduced low-declination data between 00h-04h is
+# deferred (the plan flags it as "determined later").
+
+[systematics]
+ground = false
+atmosphere = false

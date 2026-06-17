@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gtsim"
+version = "0.0.1"
+description = "Ground-based single-dish telescope simulator (408 MHz Haslam reproduction)"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy",
+    "scipy",
+    "astropy",
+    "healpy",
+    "matplotlib",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,45 @@
+# Survey configuration TEMPLATE. Copy to configs/<survey>.toml and edit.
+# Units are in the comments. See docs/CONFIGURING_SURVEYS.md for the full guide.
+# Values you MUST set per survey are marked [REQUIRED]; sourced numbers that are
+# still guesses should be marked TODO and tracked in docs/REFERENCES.md.
+
+name = "survey_name"            # [REQUIRED] short id, used in logs/outputs
+
+[site]                          # observatory location
+name = "Telescope Name"
+lat_deg = 0.0                   # [REQUIRED] geodetic latitude  [deg, + = N]
+lon_deg = 0.0                   # [REQUIRED] longitude          [deg, + = E]
+height_m = 0.0                  # elevation above sea level     [m]
+
+[instrument]
+freq_mhz = 408.0                # informational only
+beam_fwhm_deg = 0.85            # used only if you call SkyModel.smoothed(); TODO confirm
+net_k_sqrt_s = 0.2              # [REQUIRED for noise] noise-equiv. temp [K.s^0.5]
+system_temp_k = 180.0           # informational only
+f_knee_hz = 0.5                 # 1/f knee [Hz]   (assumed instrumental)
+alpha = -1.0                    # 1/f PSD slope: P ~ f^alpha  (alpha=-1 = classic 1/f)
+
+[scan]
+mode = "meridian_elevation"     # ONLY this mode is implemented (see limitations)
+rate_deg_per_sid_min = 3.0      # [REQUIRED] elevation/dec slew rate [deg / sidereal min]
+night_start_offset_sid_s = 80.0 # sweep-phase advance per night [sidereal s] -> RA grid
+dec_min_deg = -22.0             # [REQUIRED] lower dec turn [deg]
+dec_max_deg = 62.0              # [REQUIRED] upper dec turn [deg]
+azimuth = "auto"                # "auto" (S below latitude, N above) | "south" | "north"
+sample_dt_s = 1.0               # integration time per sample [s]
+cal_pause_s = 0.0               # calibration-diode dwell at the turn [s]; 0 = none
+cal_at = "max"                  # dwell at "max" | "min" | "both" turn(s)
+
+[window]
+start = "1965-11-22"            # [REQUIRED] first observing date (YYYY-MM-DD)
+end = "1966-01-27"              # [REQUIRED] last observing date (exclusive)
+night_only = true              # true: observe only when Sun below night_sun_alt_deg
+night_sun_alt_deg = -18.0       # twilight threshold [deg] (-18 astronomical, 0 sunset)
+exclude_dates = []              # dates with no survey scans, e.g. ["1965-12-25"]
+
+[coverage]
+ra_hours = [0.0, 24.0]          # [REQUIRED] RA range kept [hours], [lo, hi)
+
+[systematics]                   # NOT YET IMPLEMENTED (M5 placeholders)
+ground = false
+atmosphere = false
